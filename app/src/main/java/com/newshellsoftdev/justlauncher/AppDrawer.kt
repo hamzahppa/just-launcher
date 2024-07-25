@@ -1,6 +1,7 @@
 package com.newshellsoftdev.justlauncher
 
 import android.content.pm.ApplicationInfo
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,7 +20,8 @@ import androidx.compose.material3.*
 @Composable
 fun AppDrawer(
     apps: List<ApplicationInfo>,
-    onAppClick: (String) -> Unit
+    onAppClick: (String) -> Unit,
+    onBack: () -> Unit
 ) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val listState = rememberLazyListState()
@@ -28,6 +30,11 @@ fun AppDrawer(
         apps
     } else {
         apps.filter { it.loadLabel(LocalContext.current.packageManager).toString().contains(searchQuery.text, ignoreCase = true) }
+    }
+
+    // Handle the back press to go back to home screen
+    BackHandler {
+        onBack()
     }
 
     Box(
